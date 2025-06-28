@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Setup UAS - Aplikasi Pencatatan Keuangan
 
 Aplikasi pencatatan keuangan sederhana yang dibangun dengan Flutter dan Firebase.
@@ -63,3 +64,7 @@ Tabel `transaksi`:
 - catatan (TEXT)
 - jenis (TEXT)
 - foto (TEXT)
+=======
+Link apk : 
+
+>>>>>>> 6eda18fdefb3f5572519cced5fa5a8b3ee975f47
