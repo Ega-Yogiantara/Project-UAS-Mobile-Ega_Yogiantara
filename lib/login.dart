@@ -28,8 +28,9 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _message = 'login successful!';
       });
-      Navigator.of(context).pushReplacement(
+      Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => const MainNavigation()),
+        (route) => false,
       );
     } catch (e) {
       setState(() {

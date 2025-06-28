@@ -35,4 +35,11 @@ class TransaksiProvider with ChangeNotifier {
     await _databaseHelper.deleteTransaksi(id);
     await loadTransaksi();
   }
+
+  // Method untuk reset semua data transaksi
+  Future<void> resetAllData() async {
+    await _databaseHelper.deleteAllTransaksi();
+    _transaksiList.clear();
+    notifyListeners();
+  }
 } 

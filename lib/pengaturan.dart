@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'login.dart';
 import 'database.dart';
 import 'gaya.dart';
+import 'package:provider/provider.dart';
+import 'providers/transaksi_provider.dart';
 
 class PengaturanPage extends StatelessWidget {
   const PengaturanPage({super.key});
@@ -80,14 +82,48 @@ class PengaturanPage extends StatelessWidget {
                       ),
                     );
                     if (confirmed == true) {
-                      // Hapus semua data transaksi
-                      await DatabaseHelper().deleteAllTransaksi();
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Data berhasil direset!')),
-                        );
-                        // Refresh tampilan jika perlu
-                        Navigator.popUntil(context, (route) => route.isFirst);
+                      try {
+                        // Pastikan user masih login sebelum reset
+                        final prefs = await SharedPreferences.getInstance();
+                        final isLoggedIn = prefs.getBool('is_logged_in') ?? false;
+                        
+                        if (!isLoggedIn) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Sesi login tidak valid'),
+                              ),
+                            );
+                          }
+                          return;
+                        }
+                        
+                        // Reset semua data transaksi menggunakan provider
+                        await Provider.of<TransaksiProvider>(context, listen: false).resetAllData();
+                        
+                        // Pastikan status login tetap terjaga
+                        await prefs.setBool('is_logged_in', true);
+                        
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Data berhasil direset!'),
+                            ),
+                          );
+                          
+                          // Kembali ke halaman utama tanpa logout
+                          if (context.mounted) {
+                            Navigator.popUntil(context, (route) => route.isFirst);
+                          }
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Error saat reset data: $e'),
+                            ),
+                          );
+                        }
                       }
                     }
                   },

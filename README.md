@@ -1,16 +1,65 @@
-# setup_uas
+# Setup UAS - Aplikasi Pencatatan Keuangan
 
-A new Flutter project.
+Aplikasi pencatatan keuangan sederhana yang dibangun dengan Flutter dan Firebase.
 
-## Getting Started
+## Fitur
 
-This project is a starting point for a Flutter application.
+- Login dan Register dengan Firebase Authentication
+- Pencatatan transaksi pendapatan dan pengeluaran
+- Kategori transaksi yang dapat dikustomisasi
+- Laporan keuangan dengan grafik
+- Reset data transaksi
+- Tema gelap/terang
+- Penyimpanan foto untuk transaksi
 
-A few resources to get you started if this is your first Flutter project:
+## Perbaikan Terbaru
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Fix: Reset Data Tidak Menyebabkan Logout
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+**Masalah:** Saat melakukan reset data, aplikasi melakukan logout secara tidak sengaja.
+
+**Penyebab:** 
+- Fungsi reset data tidak mempertahankan status login dengan benar
+- Tidak ada pengecekan status login sebelum dan sesudah reset
+- Provider tidak diperbarui dengan benar setelah reset
+
+**Solusi:**
+1. Menambahkan method `resetAllData()` di `TransaksiProvider`
+2. Menambahkan pengecekan status login sebelum reset data
+3. Memastikan status login tetap terjaga setelah reset
+4. Menggunakan provider untuk mengelola state dengan lebih baik
+
+**File yang diperbaiki:**
+- `lib/pengaturan.dart` - Perbaikan fungsi reset data
+- `lib/providers/transaksi_provider.dart` - Penambahan method resetAllData
+
+## Cara Menjalankan
+
+1. Pastikan Flutter sudah terinstall
+2. Install dependencies: `flutter pub get`
+3. Jalankan aplikasi: `flutter run`
+
+## Dependencies
+
+- firebase_core
+- firebase_auth
+- shared_preferences
+- sqflite
+- provider
+- intl
+- flutter_localizations
+- image_picker
+- pie_chart
+- month_picker_dialog
+
+## Struktur Database
+
+Tabel `transaksi`:
+- id (INTEGER PRIMARY KEY)
+- tanggal (TEXT)
+- total (REAL)
+- kategori (TEXT)
+- dompet (TEXT)
+- catatan (TEXT)
+- jenis (TEXT)
+- foto (TEXT)
